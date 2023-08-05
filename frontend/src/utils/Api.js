@@ -115,8 +115,6 @@ export const api = new Api({
       'Content-Type': 'application/json'
     }
 });
-
-// class Api {
 //   constructor( {baseUrl, headers}) {
 //     this._baseUrl = baseUrl;
 //     this._headers = headers;
