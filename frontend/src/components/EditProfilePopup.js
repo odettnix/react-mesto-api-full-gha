@@ -51,7 +51,7 @@ function EditProfilePopup({onUpdateUser, isOpen, isLoading, onClose}) {
         onChange={handleChange}
         type="text"
         className="popup__input popup__input_value-text"
-        name="placeLink"
+        name="description"
         placeholder="О себе"
         required
         minLength="2"

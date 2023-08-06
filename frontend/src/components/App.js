@@ -35,44 +35,46 @@ function App() {
   const [currentUser, setCurrentUser] = useState({});
 
   const [isOpenInfoTooltip, setOpenInfoTooltip] = useState(false)
-  const [loggedIn, isloggedIn] = useState(false)
+  const [loggedIn, isloggedIn] = useState(false);
   const [registerResponse, isregisterResponse] = useState({
     status: false,
     text: "",
   });
   const navigate = useNavigate();
-  const [userEmail, setUserEmail] = useState("")
+  const [userEmail, setUserEmail] = useState("");
+
+  const token = localStorage.getItem('jwt');
 
   useEffect(() => {
-    const jwt = localStorage.getItem('jwt');
-    if (jwt) {
-      auth.checkToken(jwt)
+      if (token){
+        auth.checkToken(token)
         .then((res) => {
-          if (res) {
+          if (res){
             isloggedIn(true);
             setUserEmail(res.email)
-            navigate("/", { replace: true })
+            navigate("/", {replace: true})
           }
         })
         .catch((err) => {
           console.log(`Ошибка: ${err}`);
         })
-    }
-  }, [navigate])
-
-  useEffect(() => {
-    if (isloggedIn) {
-      Promise.all([api.getUserInfo(), api.getInitialCards()])
+      }
+    }, [navigate, token])
+  
+    useEffect(() => {
+      if(token) {
+        isloggedIn(true);
+        Promise.all([api.getUserInfo(), api.getInitialCards()])
         .then(([user, cards]) => {
           setCurrentUser(user);
           setCards(cards);
+          
         })
         .catch((err) => {
-          console.log(`Ошибка получения данныx: ${err}`);
-        });
-    }
-
-  }, [isloggedIn]);
+          console.log(err);
+        })
+      }
+    }, [token]);
 
   function signOut() {
     localStorage.removeItem('jwt');

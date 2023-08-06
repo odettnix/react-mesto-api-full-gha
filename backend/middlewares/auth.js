@@ -1,6 +1,9 @@
+require('dotenv').config();
+
 const jwt = require('jsonwebtoken');
 
-const { SECRET_KEY } = require('../utils/constants');
+const { NODE_ENV, JWT_SECRET } = process.env;
+
 const UnauthorizedError = require('../errors/UnauthorizedError');
 
 module.exports = (req, res, next) => {
@@ -15,7 +18,7 @@ module.exports = (req, res, next) => {
   let payload;
 
   try {
-    payload = jwt.verify(token, SECRET_KEY);
+    payload = jwt.verify(token, NODE_ENV === 'production' ? JWT_SECRET : 'OhNoThisIsSecretKey');
   } catch (err) {
     throw next(new UnauthorizedError('Неправильные почта или пароль'));
   }
